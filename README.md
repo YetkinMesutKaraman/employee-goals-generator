@@ -31,9 +31,13 @@ curl -Ls https://astral.sh/uv/install.sh | bash
 uv sync
 ```
 # Activate virtual environment
+```bash
 source .venv/bin/activate
+```
 # Install dependencies
+```bash
 uv pip install -r pyproject.toml
+```
 
 ## Configuration
 
