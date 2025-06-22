@@ -24,7 +24,7 @@ This system generates personalized employee goals using OpenAI's language models
 
 1. Clone the repository
 2. Install dependencies:
-# Install uv if you don't have it yet
+### Install uv if you don't have it yet
 ```bash
 curl -Ls https://astral.sh/uv/install.sh | bash
 ```
@@ -32,11 +32,11 @@ curl -Ls https://astral.sh/uv/install.sh | bash
 ```bash
 uv sync
 ```
-# Activate virtual environment
+### Activate virtual environment
 ```bash
 source .venv/bin/activate
 ```
-# Install dependencies
+### Install dependencies
 ```bash
 uv pip install -r pyproject.toml
 ```
