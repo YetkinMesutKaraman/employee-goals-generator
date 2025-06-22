@@ -12,7 +12,7 @@ from openai import AsyncOpenAI, OpenAI
 from llm_interface.async_llm_inference import batch_generate
 from llm_interface.llm_inference import generate_with_openai
 from task_configs.config import LLM_API_TIMEOUT, LLM_MAX_RETRIES, LLM_TASKS_CONFIG
-from task_configs.prompt_prep import route_prompt_formatting
+from task_configs.prompt_prep import format_goal_generation_prompt
 
 ## import from local modules
 from utils.data_prep import load_employee_data
@@ -89,11 +89,8 @@ def generate_single_employee_goals(employee_data: dict, llm_input_args_config: d
     Returns:
         dict: Generated goals and metadata.
     """
-    task_type = "generate_employee_goals"
     # route to the correct function based on the given task type
-    prompt_dict = route_prompt_formatting(
-        task_type, employee_data, llm_input_args_config
-    )
+    prompt_dict = format_goal_generation_prompt(employee_data, llm_input_args_config)
     # generate the output using OpenAI client
     llm_output = generate_with_openai(client, prompt_dict, llm_input_args_config)
     return llm_output
@@ -111,12 +108,11 @@ def generate_batch_employee_goals(df_employee, llm_input_args_config: dict) -> l
     Returns:
         list: List of generated goals for each employee.
     """
-    task_type = "generate_employee_goals"
     # prepare batch data for processing
     employee_dict_list = df_employee.to_dict(orient="records")
     # prepare batch data for LLM input
     formatted_prompt_dict_list = [
-        route_prompt_formatting(task_type, employee_data, llm_input_args_config)
+        format_goal_generation_prompt(employee_data, llm_input_args_config)
         for employee_data in employee_dict_list
     ]
     # Run async goal generation

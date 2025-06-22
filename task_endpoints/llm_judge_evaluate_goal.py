@@ -12,7 +12,7 @@ from llm_interface.async_llm_inference import batch_generate
 ## import from local modules
 from llm_interface.llm_inference import generate_with_openai
 from task_configs.config import LLM_API_TIMEOUT, LLM_MAX_RETRIES, LLM_TASKS_CONFIG
-from task_configs.prompt_prep import route_prompt_formatting
+from task_configs.prompt_prep import format_llm_judge_evaluate_goal_prompt
 
 # Configure basic logging
 logging.basicConfig(
@@ -49,7 +49,7 @@ def evaluate_single_goal(employee_data):
     task_type = "llm_judge_evaluate_goal"
     llm_input_args_config = LLM_TASKS_CONFIG[task_type]["openai"]["llm_input_args"]
     # route to the correct function based on the given task type
-    prompt_dict = route_prompt_formatting(
+    prompt_dict = format_llm_judge_evaluate_goal_prompt(
         task_type, employee_data, llm_input_args_config, goal=employee_data["goals"][0]
     )
     # generate the output using OpenAI client
@@ -62,11 +62,10 @@ async def process_single_employee_goals(employee_data, llm_input_args_config):
     """
     Process goals for a single employee asynchronously.
     """
-    task_type = "llm_judge_evaluate_goal"
     # Prepare the prompt for LLM to evaluate the quality of generated goals
     prompt_dicts = [
-        route_prompt_formatting(
-            task_type, employee_data, llm_input_args_config, goal=goal
+        format_llm_judge_evaluate_goal_prompt(
+            goal, employee_data, llm_input_args_config
         )
         for goal in employee_data["goals"]
     ]
